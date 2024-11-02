@@ -3,6 +3,7 @@ package org.chandima.quizapp.service;
 import org.chandima.quizapp.model.Question;
 import org.chandima.quizapp.model.QuestionWrapper;
 import org.chandima.quizapp.model.Quiz;
+import org.chandima.quizapp.model.UserResponse;
 import org.chandima.quizapp.repository.QuestionRepo;
 import org.chandima.quizapp.repository.QuizRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,20 @@ public class QuizService {
 
             return new ResponseEntity<>(questionsForUser,HttpStatus.OK);
 
+    }
+
+    public ResponseEntity<Integer> calculateResult(Integer id, List<UserResponse> userResponses) {
+
+        int i=0,marks = 0;
+        Quiz quiz = quizRepo.findById(id).get();
+        List<Question> questions =  quiz.getQuestions();
+        for(UserResponse response : userResponses){
+            if(response.getResponse().equals(questions.get(i).getRightAnswer())){
+                marks++;
+            }
+            i++;
+        }
+
+        return new ResponseEntity<>(marks,HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package org.chandima.quizapp.controller;
 
 
 import org.chandima.quizapp.model.QuestionWrapper;
+import org.chandima.quizapp.model.UserResponse;
 import org.chandima.quizapp.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,15 @@ public class QuizController {
         return  quizService.createQuiz(category, numQ, title);
     }
 
-
     @GetMapping("get/{id}")
     public ResponseEntity<List<QuestionWrapper>> getQuiz(@PathVariable("id") Integer quizId){
         return quizService.getQuiz(quizId);
     }
+
+    @PostMapping("submit/{id}")
+    public ResponseEntity<Integer> submitQuiz(@PathVariable Integer id, @RequestBody List<UserResponse> userResponses){
+            return quizService.calculateResult(id, userResponses);
+    }
+
+
 }
